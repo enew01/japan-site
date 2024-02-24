@@ -1,29 +1,72 @@
 // pages/index.js
 import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css'; // Import Swiper styles
-import 'swiper/css/navigation'; // Import Swiper navigation styles
-import 'swiper/css/pagination'; // Import Swiper pagination styles
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+import { Navigation } from 'swiper/modules';
 import styled from 'styled-components';
+
 
 const CarouselStyles = styled.section`
   position: relative;
   padding: 100px;
   height: 100vh;
   width: 100vw;
+  background: rgb(177,6,6);
+background: linear-gradient(0deg, rgba(177,6,6,1) 11%, rgba(255,166,196,1) 91%);
   .swiper {
     position: absolute;
-    height: 70%;
-    width: 100%;
+    height: 80%;
+    width: 90%;
     bottom: 10%;
     .swiper-slide {
-      justify-content: center;
-      display: flex;
-      align-items: center;
-      gap: 30px;
-      img {
-        height: 60vh;
-        cursor: pointer; /* Add cursor pointer to indicate clickability */
+      padding: 45px 100px;
+      .inner-wrap {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        padding: 45px;
+        border: solid 3px #FFF;
+        background-color: #0e0e0e;
+        border-radius: 30px;
+      }
+      .image-wrap {
+        display: block;
+        position: relative;
+        width: auto;
+        height: 100%;
+        .click-notice {
+          position: absolute;
+          top: 0;
+          left: 0;
+          padding: 10px;
+          background-color: #0e0e0e;
+          color: #F0F0F0;
+          font-family: arial;
+          font-weight: 500;
+          font-size: 16px;
+
+        }
+        img {
+          height: 100%;
+          cursor: pointer;
+        }
+      }
+      .text-wrap {
+        background-color: #F0F0F0;
+        border: solid 2px #FFF;
+        border-radius: 10px;
+        padding: 25px 15px;
+        font-family: arial;
+        font-weight: 500;
+        font-size: 24px;
       }
     }
   }
@@ -55,6 +98,11 @@ const ImageSlideshow = () => {
     '/images/3-Tokyo-Shinjuku.jpg',
     // Add more image paths as needed
   ];
+  const texts = [
+    'This is a string for the first box',
+    'THis, however, is for the second',
+    'And this, lastly, is for the third',
+    ];
 
   const openLightbox = (image) => {
     setLightboxImage(image);
@@ -66,21 +114,28 @@ const ImageSlideshow = () => {
 
   return (
     <CarouselStyles>
-      <Swiper spaceBetween={50} slidesPerView={1} navigation pagination={{ clickable: true }}>
+      <Swiper
+        spaceBetween={50}
+        slidesPerView={1}
+        navigation={true} 
+        modules={[Navigation]}
+      >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
+            <div className="inner-wrap">
+              <div className="image-wrap">
+                <div className="click-notice">Click to Englarge</div>
             <img
               src={image}
               alt={`Slide ${index + 1}`}
-              onClick={() => openLightbox(image)} // Open lightbox on click
-            />
-            {/* Add associated text here */}
-            <p>Associated Text for Slide {index + 1}</p>
+              onClick={() => openLightbox(image)}
+            /></div>
+            <div className="text-wrap">{texts[index]}</div>
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* Lightbox */}
       {lightboxImage && (
         <Lightbox onClick={closeLightbox}>
           <img src={lightboxImage} alt="Lightbox" />
